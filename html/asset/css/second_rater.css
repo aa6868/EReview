@@ -1,0 +1,187 @@
+button {
+	background-color: #5379f7;
+    color: white;
+    padding: 12px 20px;
+    border: 1.5px solid #000000;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background-color: #001aff;
+    border: 1.5px solid #000000;
+}
+
+button#done{
+	background-color: #ff0000;
+    color: white;
+    padding: 12px 20px;
+    border: 1.5px solid #000000;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影效果，以獲得立體感 */
+}
+
+#done:hover {
+    background-color: #9b0505;
+    border: 1.5px solid #000000;
+}
+
+
+textarea.feedback,
+button.delete-button {
+    width: calc(100% - 5px); /* 考慮到兩側的外邊距，使textarea和button填滿父容器的寬度 */
+    margin: 5px; /* 設置外邊距 */
+}
+
+span.newSpan {
+    display: block; /* 讓每個 span 元素都獨立成一行 */
+    width: 100%; /* 設置寬度為父元素的100%，使其填滿父元素的寬度 */
+    margin-bottom: 5px; /* 設置下邊距為10像素，用於間隔每行的元素 */
+    padding: 5px; /* 可以添加填充以增加元素的內容區域 */
+    color: #333; /* 設置文本顏色 */
+    font-size: 16px; /* 設置字體大小 */
+    line-height: 1.5;
+    overflow-y: auto;
+    word-wrap: break-word;
+}
+
+
+
+div.divForAdvices{
+    width: 100%;
+    height: contentHeight + 'px';
+    font-size: 17px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+}
+
+dialog.dialog{
+    width: 450px;
+    max-height: 350px; /* 設置對話框的最大高度 */
+    overflow-y: auto;
+}
+
+.ellipsis {
+    white-space: normal; /* 允許文字換行 */
+    word-wrap: break-word; /* 在必要時換行 */
+    overflow-wrap: break-word;
+}
+
+button.close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color:#000000;
+    font-size: 16px;
+    background-color: rgba(64, 64, 64, 0.7);
+    border: none;
+    cursor: pointer;
+}
+
+button.close-button:hover {
+    color: red;
+}
+      
+body{
+    background-color: rgb(216, 218, 240);
+    font-family: "Microsoft JhengHei";
+}
+
+table {
+    background-color: aliceblue;
+}
+
+img {
+    display: none;
+    border: 1.5px solid #000000;    
+}
+textarea{
+    font-size: 16px;
+    resize: none;
+}
+
+
+
+table, tr{
+ border:1;
+}
+
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+
+body {
+    padding: 20px 0;
+}
+
+h1, h2 {
+    margin: 0;
+    padding: 34px 0 14px 40px;
+}
+
+nav > ul {
+    background-color: rgb(230, 230, 230);
+    list-style: none;   /* 移除項目符號 */
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    color: inherit; /* 移除超連結顏色 */
+    display: block; /* 讓 <a> 填滿 <li> */
+    font-size: 1.2rem;
+    padding: 10px;
+    text-decoration: none;  /* 移除超連結底線 */
+}
+
+/* 滑鼠移到 <a> 時變成深底淺色 */
+nav li:hover {
+    background-color: rgb(115, 115, 115);
+    color: white;
+}
+
+.flex-nav {
+    display: flex;
+    justify-content: center;
+}
+
+.inline-block-nav {
+    text-align: center;
+    font-size: 0;   /* 移除 <li> 之間的空隙 */
+}
+
+.inline-block-nav > li {
+    display: inline-block;
+}
+
+.advice, .advice2, .advice3 {
+    width: 350px;
+    height: 650px;
+}
+
+#myCell {
+    display: flex;
+    justify-content: space-around;
+    /* width: max-content;  */
+}
+
+#later1, #later2, .areaButton, .globalButton{    
+    height: 45px;
+}
+
+.content {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+  
+
+
+  
+  
+  

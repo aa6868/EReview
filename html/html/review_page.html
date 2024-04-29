@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>文章互評</title>
+   <link type="text/css" href="../asset/css/login.css" rel="stylesheet">
+</head>
+
+<body>
+   <form>
+      <div class="container">
+         <h1>文章互評</h1>
+         <button type="button" id="button" class="cbtn">上一步</button>
+      </div>
+
+      <label for="field1">第一篇</label>
+      <div class="button-container">
+         <button type="button" id="button1">審閱文章1</button>
+         <button type="button" id="button5" disabled>討論</button>
+         <button type="button" id="button3" disabled>修訂稿</button>
+      </div>
+      <br><br>
+
+      <label for="field2">第二篇</label>
+      <div class="button-container">
+         <button type="button" id="button2" >審閱文章2</button>
+         <button type="button" id="button6" disabled>討論</button>
+         <button type="button" id="button4" disabled>修訂稿</button>
+      </div>
+   </form>
+
+
+
+   <script type="module">
+
+
+      import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js'
+      import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js';
+      import { db, auth } from '../js/DB.js';
+
+
+      async function getUsers(db) {
+         const citiesCol = collection(db, 'users');
+         const citySnapshot = await getDocs(citiesCol);
+         const cityList = citySnapshot.docs.map(doc => {
+            return doc;
+         });
+         return cityList;
+      }
+
+
+      //抓取當前ID
+      function getCurrentUserIdx(users, currentUser) {
+         let idx = -1;
+         users.forEach((user, index) => {
+
+            if (user.id === currentUser.uid) {
+               idx = index;
+               localStorage.setItem('uid', currentUser.uid);
+
+            }
+         })
+         return idx;
+
+      }
+
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const round = urlParams.get('round');
+
+
+      onAuthStateChanged(auth, async currentUser => {
+         if (currentUser) {
+
+            const users = await getUsers(db);
+            const currentUserIdx = getCurrentUserIdx(users, currentUser);
+
+            let previousUserIdx;
+            let nextUserIdx;
+            if (currentUserIdx === 0) {
+               previousUserIdx = users.length - 1;
+               nextUserIdx = currentUserIdx + 1;
+            } else if (currentUserIdx === users.length - 1) {
+               previousUserIdx = currentUserIdx - 1;
+               nextUserIdx = 0;
+            } else {
+               previousUserIdx = currentUserIdx - 1;
+               nextUserIdx = currentUserIdx + 1;
+            }
+
+
+
+            const button = document.getElementById("button");
+            const button1 = document.getElementById("button1");
+            const button2 = document.getElementById("button2");
+            const button3 = document.getElementById("button3");
+            const button4 = document.getElementById("button4");
+            const button5 = document.getElementById("button5");
+            const button6 = document.getElementById("button6");
+
+            // button1.innerText = JSON.stringify(users[previousUserIdx].data().email); // 將前一筆資料印在按鈕1上
+            // button2.innerText = JSON.stringify(users[nextUserIdx].data().email); // 將下一筆資料印在按鈕2上
+
+            async function getRound(id, round) {
+               const user = await getDocs(collection(db, "users", id, round));
+               let ret;
+               const list = user.forEach(doc => {
+                  ret = doc.data();
+               })
+               return ret;
+            }
+
+            const previousUser = await getRound(users[previousUserIdx].id, round);
+            const nextUser = await getRound(users[nextUserIdx].id, round);
+            if (previousUser.fixedText) {
+               button3.disabled = false;
+            }
+            if (nextUser.fixedText) {
+               button4.disabled = false;
+            }
+            // if (users[previousUserIdx].data().liked && users[previousUserIdx].data().liked.indexOf(currentUser.uid) !== -1) {
+            //    button3.disabled = true;
+            // }
+            // if (users[nextUserIdx].data().liked && users[nextUserIdx].data().liked.indexOf(currentUser.uid) !== -1) {
+            //    button4.disabled = true;
+            // }
+            
+            if (previousUser.rated && previousUser.rated.indexOf(currentUser.uid) !== -1) {
+               button1.disabled = true;
+            }
+            
+         
+            if (nextUser.rated && nextUser.rated.indexOf(currentUser.uid) !== -1) {
+               button2.disabled = true;
+            }
+
+            if (previousUser.rated && previousUser.rated.length >= 2) {
+               console.log(previousUser.rated)
+               button5.disabled = false; 
+            }
+
+            if (nextUser.rated && nextUser.rated.length >= 2) {
+               button6.disabled = false;
+            }
+
+
+
+
+            button.addEventListener("click", () => {
+               window.location.href = `id_page.html?round=${round}`;
+            });
+            button1.addEventListener("click", () => {
+               const urlParams = new URLSearchParams(window.location.search);
+               const round = urlParams.get('round');
+               window.location.href = `first_rater.html?user=${users[previousUserIdx].id}&round=${round}`;
+            });
+
+            button2.addEventListener("click", () => {
+               const urlParams = new URLSearchParams(window.location.search);
+               const round = urlParams.get('round');
+               window.location.href = `first_rater.html?user=${users[nextUserIdx].id}&round=${round}`;
+            });
+
+            button3.addEventListener("click", () => {
+               const urlParams = new URLSearchParams(window.location.search);
+               const round = urlParams.get('round');
+               window.location.href = `finally_page.html?user=${users[previousUserIdx].id}&round=${round}`;
+            });
+
+            button4.addEventListener("click", () => {
+               const urlParams = new URLSearchParams(window.location.search);
+               const round = urlParams.get('round');
+               window.location.href = `finally_page.html?user=${users[nextUserIdx].id}&round=${round}`;
+            });
+
+            button5.addEventListener("click", () => {
+               const urlParams = new URLSearchParams(window.location.search);
+               const round = urlParams.get('round');
+               window.location.href = `forum.html?user=${users[previousUserIdx].id}&round=${round}`;
+            });
+
+            button6.addEventListener("click", () => {
+               const urlParams = new URLSearchParams(window.location.search);
+               const round = urlParams.get('round');
+               window.location.href = `forum.html?user=${users[nextUserIdx].id}&round=${round}`;
+            });
+
+
+         }
+
+      });
+
+
+
+
+
+   </script>
+
+</body>
+
+</html>
